@@ -1,5 +1,6 @@
 import os,shutil,os.path,sys
 import filecmp
+import asyncio
 import time, datetime
 from tkinter import *
 from tkinter.filedialog import asksaveasfile
@@ -52,21 +53,21 @@ lbl4.grid(column=1, row=3,sticky='W')
 #==========Start button-Function to start tracking===
 src = "C:/Users/phanh/source/repos/Lab1/public/"
 dst = "C:/Users/phanh/source/repos/Lab1/attacker/"
+
 def Track():
     def Copy(src):
         L = []
         for root, dirs, files in os.walk(src):
             for file in files:
                 L.append(os.path.join(root,file))
-                shutil.copyfile(os.path.join(root,file),dst+file)
+                shutil.copyfile(os.path.join(root,file),dst+file) 
+                modified_time = os.path.getmtime(file)
+                modified_date = datetime.date.fromtimestamp(modified_time)
+                os.rename(file,modified_date.strftime("%d.%m.%Y"+"_"+file))
+       
     Copy(src)
-        
-
 
 startBtn = Button(app,text='Start tracking!',command=Track)
 startBtn.grid(column=1, row=6, sticky='W')
 #==================================================
-
-
-
 app.mainloop()
